@@ -38,7 +38,7 @@ needToChangeIDSize.forEach(function(ele) {
 
 });
 
-/*
+
 var storageRef = firebase.storage().ref();
 
 // get image from firebase
@@ -82,54 +82,41 @@ document.getElementById('sendMessage').onclick = function() {
     var name = document.getElementById('formName').value;
     var text = document.getElementById('formText').value;
 
-    var textFile = new Blob([text], {
-        type: 'text/plain'
-    });
+    if(name && text){
+        var textFile = new Blob([text], {
+            type: 'text/plain'
+        });
 
-    var metadata = {
-        contentType: 'text/plain'
-    };
+        var metadata = {
+            contentType: 'text/plain'
+        };
 
-    var childName = 'message/secret-message-' + name + '_' + timeUTC8stamp + '.txt';
-    var uploadTask = storageRef.child(childName).put(textFile, metadata);
 
-    uploadTask.then(function(snapshot) {
-        // console.log('上傳完成', snapshot);
-        // console.log(snapshot.metadata);
-        alert('上傳完成，檔案名稱為: ' + snapshot.metadata.fullPath.slice(0, snapshot.metadata.fullPath.indexOf('_')) + '\n\n下載URL為: ' + snapshot.downloadURL);
 
-        // insert to database
-        databaseRef.child('messages/' + name + '_' + timeUTC8stamp)
-            .set({
-                "name": name,
-                "date": date,
-                "text": text
-            });
+        var childName = 'message/secret-message-' + name + '_' + timeUTC8stamp + '.txt';
+        var uploadTask = storageRef.child(childName).put(textFile, metadata);
 
-    }).catch(function(error) {
-        console.error('Upload failed:', error);
-    });
+        uploadTask.then(function(snapshot) {
+            // console.log('上傳完成', snapshot);
+            // console.log(snapshot.metadata);
+            alert('上傳完成，檔案名稱為: ' + snapshot.metadata.fullPath.slice(0, snapshot.metadata.fullPath.indexOf('_')) + '\n\n下載URL為: ' + snapshot.downloadURL);
+
+            // insert to database
+            databaseRef.child('messages/' + name + '_' + timeUTC8stamp)
+                .set({
+                    "name": name,
+                    "date": date,
+                    "text": text
+                });
+
+        }).catch(function(error) {
+            console.error('Upload failed:', error);
+        });
+
+
+    }
+
+    
+
+
 }
-
-// document.getElementById('gfLogin').onclick = function(){alert("hi");}
-
-
-    // var provider = new firebase.auth.GoogleAuthProvider();
-    // firebase.auth().signInWithPopup(provider).then(function(result) {
-    //     // This gives you a Google Access Token. You can use it to access the Google API.
-    //     var token = result.credential.accessToken;
-    //     // The signed-in user info.
-    //     var user = result.user;
-    //     // ...
-    // }).catch(function(error) {
-    //     // Handle Errors here.
-    //     console.error(error);
-    //     var errorCode = error.code;
-    //     var errorMessage = error.message;
-    //     // The email of the user's account used.
-    //     var email = error.email;
-    //     // The firebase.auth.AuthCredential type that was used.
-    //     var credential = error.credential;
-    //     // ...
-    // });
-*/
